@@ -44,6 +44,6 @@ const hammers = io
 
 app.use(serveStatic(resolve(__dirname, '..', 'build')));
 
-http.listen(3001, () => {
+http.listen(process.env.PORT || 3001, () => {
   console.log("Listening on 3001...");
 })
