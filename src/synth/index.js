@@ -6,7 +6,7 @@ const highNote = 493.88;
 
 export default class Synth {
   constructor(oscillatorType) {
-    this.attackTime = 0.25; 
+    this.attackTime = 0.5; 
     this.releaseTime = 2.75;
     this.maxGain = 0.75;
     this.oscillatorType = oscillatorType;

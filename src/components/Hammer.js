@@ -1,6 +1,7 @@
 import React from 'react';
 import connect from '../api'
 import Synth from '../synth'
+import Flash from './Flash'
 
 export default class extends React.Component {
 
@@ -11,19 +12,14 @@ export default class extends React.Component {
     this.api = connect('hammer');
     this.state = {
       note: 0,
-      animate: true,
       color: '#343434'
     };
   }
 
   componentWillMount() {
     this.api.on('note', msg => {
-      console.log(msg)
-
       this.synth.play(msg.note);
-
-      this.setState({ color: msg.color , animate: false });
-      setTimeout(() => this.setState({animate: true }), 1);
+      this.setState({ color: msg.color });
     });
   }
 
@@ -37,21 +33,20 @@ export default class extends React.Component {
   }
 
   componentDidMount() {
-    this.hammerElm.addEventListener('touchstart', this.enterFullScreen);
-    this.hammerElm.addEventListener('mousedown', this.enterFullScreen);
-
+    ['touchstart', 'mousedown'].forEach(e => this.hammerElm.addEventListener(e, this.enterFullScreen));
   }
   
 
   componentWillUnmount() {
     this.api.disconnect();
+    ['touchstart', 'mousedown'].forEach(e => this.hammerElm.removeEventListener(e, this.enterFullScreen));
   }
 
   render() {
-    return (<div ref={r => this.hammerElm = r} className="hammer">
-      <div className={this.state.animate ? 'flash': ''} style={{background: this.state.color}}>
+    return (
+      <div ref={r => this.hammerElm = r} className="hammer">
+        <Flash color={this.state.color} />
       </div>
-    </div>);
-
+      );
   }
 }
