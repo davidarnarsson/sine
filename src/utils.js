@@ -10,6 +10,8 @@ const notes = [130.81, 146.83, 164.81, 174.61, 196, 220, 246.94, 261.63, 293.66,
 const twelfthRootOf2 = 1.059463094359; 
 
 export const pentatonicScale = [0, 3, 5, 7, 10, 12, 15, 17, 19, 22, 24];
+export const majorScale = [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24];
+export const minorScale = [0, 2, 3, 5, 7, 8, 10, 12, 14, 15, 17, 19, 20, 22, 24];
 
 const names = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#']
 
@@ -22,7 +24,6 @@ export function calculateNote(baseNote = 440.0, halfSteps) {
 }
 
 export function getRandomNote(scale = notes) {  
-  const idx = Math.floor(Math.random() * notes.length);
-  console.log(notes[idx], idx)
-  return notes[idx];
+  const idx = Math.floor(Math.random() * scale.length);
+  return scale[idx];
 } 

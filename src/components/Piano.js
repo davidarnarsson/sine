@@ -1,8 +1,24 @@
 import React from 'react'; 
 import connect from '../api'; 
-import { getRandomNote, getRandomColor, calculateNote, pentatonicScale } from '../utils'
+import { getRandomNote, getRandomColor, calculateNote, pentatonicScale, majorScale, minorScale } from '../utils'
 import Flash from './Flash'
 import Keys from './Keys'
+import ScaleSelect from './ScaleSelect'
+
+const scales = [
+  {
+    name: 'Pentatonic',
+    value: pentatonicScale
+  },
+  {
+    name: 'Major',
+    value: majorScale
+  },
+  {
+    name: 'Minor',
+    value: minorScale
+  }
+];
 
 export default class extends React.Component {
   constructor(props) {
@@ -10,11 +26,15 @@ export default class extends React.Component {
 
     this.state = {
       color: '#353535',
-      hammers: []
+      hammers: [],
+      scale: scales[0]
     };
   }
 
-  signalNote = (id, note = getRandomNote()) => {
+  signalNote = (id, note) => {
+    if (!note) {
+      note = getRandomNote(this.state.scale.value);
+    }
     const color = getRandomColor();
     this.api.emit('note', { note, color, id });
     this.setState({ color });    
@@ -37,11 +57,11 @@ export default class extends React.Component {
   }
 
   onTriggerKey = (k, name, index) => {
-    const scale = pentatonicScale
+    const { value } = this.state.scale;
 
-    const step = scale[index % scale.length]; // + (Math.floor(index / scale.length) * scale[scale.length - 1])
+    const step = value[index % value.length]; // + (Math.floor(index / scale.length) * scale[scale.length - 1])
     
-    this.signalNote(k, calculateNote(164.81, step + 12))
+    this.signalNote(k, calculateNote(164.81, step + 7))
   }
 
   onHammerDisconnect = (h) => {
@@ -67,10 +87,15 @@ export default class extends React.Component {
     ['touchstart', 'mousedown'].forEach(evt => this.allTrigger.removeEventListener(evt, _ => this.signalNote())); 
   }
   
+  onScaleSelect = (scale) => {
+    this.setState({ scale });
+  }
+
   render() {
     return (
       <div className="piano" >
         <Flash color={this.state.color} />
+        <ScaleSelect scales={scales} onScaleSelect={this.onScaleSelect} />
         <div className="all-trigger" ref={at => this.allTrigger = at}>
         </div>  
         <Keys keys={this.state.hammers} onTriggerKey={this.onTriggerKey} />   
