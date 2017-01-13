@@ -32,24 +32,18 @@ export default class extends React.Component {
     });
   }
 
-  enterFullScreen = () => {
-    const { webkitRequestFullScreen, webkitRequestFullscreen, mozRequestFullScreen, msRequestFullscreen} = this.hammerElm
-    const requestFullscreen = webkitRequestFullscreen || webkitRequestFullScreen || mozRequestFullScreen || msRequestFullscreen;
-
-    if (requestFullscreen) {
-      requestFullscreen.call(this.hammerElm);
-    }
+  unlockAudioContext = () => {
+    this.synth.unlock();
   }
-
+  
   componentDidMount() {
-    
     this.nameInput.focus();
-   // ['touchstart', 'mousedown'].forEach(e => this.hammerElm.addEventListener(e, this.enterFullScreen));
+    ['touchstart', 'mousedown'].forEach(e => this.hammerElm.addEventListener(e, this.unlockAudioContext));
   }
   
   componentWillUnmount() {
     this.api.disconnect();
-    //['touchstart', 'mousedown'].forEach(e => this.hammerElm.removeEventListener(e, this.enterFullScreen));
+    ['touchstart', 'mousedown'].forEach(e => this.hammerElm.removeEventListener(e, this.unlockAudioContext));
   }
 
   onNameChange = (e) => {

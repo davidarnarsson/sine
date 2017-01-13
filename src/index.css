@@ -88,7 +88,7 @@ body {
 }
 
 .input-name { 
-  font-size: calc(2em + 1vw);
+  font-size: calc(1em + 1vw);
   background: transparent; 
   border: none;
   border-bottom: 3px solid white; 
