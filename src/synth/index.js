@@ -1,8 +1,6 @@
 /* @global window  */
 
 const AudioContext = window.AudioContext || window.webkitAudioContext;
-const lowNote = 261.63;
-const highNote = 493.88;
 
 export default class Synth {
   constructor(oscillatorType) {

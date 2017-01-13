@@ -9,8 +9,9 @@ body {
   animation: background-fade-in-out 3s linear forwards;
   height: 100vh;
   width: 100vw;
-
   opacity: 0;
+  position: absolute;
+  z-index: -1;
 }
 
 @keyframes background-fade-in-out {
@@ -27,4 +28,148 @@ body {
 
 :-webkit-full-screen {
   background: #343434;
+}
+
+.piano {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column; 
+}
+
+.all-trigger {
+  flex-basis: 90%;
+  height: 80vh;
+}
+
+.keys {
+  bottom: 0;
+  position: absolute; 
+  display: flex; 
+  height: 20vh; 
+  width: 100vw; 
+  flex-flow: row nowrap;
+  overflow-x: auto; 
+}
+
+.key {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0 1 10%;
+  height: 90%;
+  background: rgba(255,255,255,0.75);
+  transition: all .3s;
+  font-size: .75em;
+  padding: .15em;
+  margin-right: 2px;
+  box-shadow: 2px 2px 6px rgba(0,0,0,.18);
+  animation: flipInX .5s linear forwards;
+}
+
+.key:hover { 
+  background: white;   
+}
+
+.key:active {
+  box-shadow: inset -5px -5px 10px rgba(0,0,0,.33), inset 5px -5px 10px rgba(0,0,0,.33);
+}
+
+.key__name {
+  transform: rotate(90deg);
+}
+
+.hammer {
+  display: flex;
+  justify-content: center;
+  align-items: center;   
+  height: 100vh;
+  width: 100vw;
+}
+
+.input-name { 
+  font-size: calc(2em + 1vw);
+  background: transparent; 
+  border: none;
+  border-bottom: 3px solid white; 
+  outline: none;
+  color: white;
+  padding: 0.5em 0.25em;
+  display: flex; 
+
+}
+
+
+
+@-webkit-keyframes flipInX {
+    0% {
+        -webkit-transform: perspective(400px) rotate3d(1,0,0,90deg);
+        transform: perspective(400px) rotate3d(1,0,0,90deg);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+        opacity: 0
+    }
+
+    40% {
+        -webkit-transform: perspective(400px) rotate3d(1,0,0,-20deg);
+        transform: perspective(400px) rotate3d(1,0,0,-20deg);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in
+    }
+
+    60% {
+        -webkit-transform: perspective(400px) rotate3d(1,0,0,10deg);
+        transform: perspective(400px) rotate3d(1,0,0,10deg);
+        opacity: 1
+    }
+
+    80% {
+        -webkit-transform: perspective(400px) rotate3d(1,0,0,-5deg);
+        transform: perspective(400px) rotate3d(1,0,0,-5deg)
+    }
+
+    100% {
+        -webkit-transform: perspective(400px);
+        transform: perspective(400px)
+    }
+}
+
+@keyframes flipInX {
+    0% {
+        -webkit-transform: perspective(400px) rotate3d(1,0,0,90deg);
+        transform: perspective(400px) rotate3d(1,0,0,90deg);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+        opacity: 0
+    }
+
+    40% {
+        -webkit-transform: perspective(400px) rotate3d(1,0,0,-20deg);
+        transform: perspective(400px) rotate3d(1,0,0,-20deg);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in
+    }
+
+    60% {
+        -webkit-transform: perspective(400px) rotate3d(1,0,0,10deg);
+        transform: perspective(400px) rotate3d(1,0,0,10deg);
+        opacity: 1
+    }
+
+    80% {
+        -webkit-transform: perspective(400px) rotate3d(1,0,0,-5deg);
+        transform: perspective(400px) rotate3d(1,0,0,-5deg)
+    }
+
+    100% {
+        -webkit-transform: perspective(400px);
+        transform: perspective(400px)
+    }
+}
+
+.flipInX {
+    -webkit-backface-visibility: visible!important;
+    backface-visibility: visible!important;
+    -webkit-animation-name: flipInX;
+    animation-name: flipInX
 }

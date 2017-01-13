@@ -8,17 +8,23 @@ io.origins('*:*') // for latest version
 let hammerSockets = []; 
 
 const randomElement = (arr) => arr[Math.floor(Math.random() * arr.length)];
-
+const notPlaying = () => hammerSockets.find(x => !x.playing)
 const piano = io
   .of('/piano')
   .on('connection', p => {
-    console.log(`Piano ${p.id} connected!`);
 
+    p.emit('hammers', hammerSockets.map(x => ({id: x.id, name: x.name})));
     p.on('note', msg => {
-      const availableHammer = randomElement(hammerSockets)
-      if (availableHammer) {
-        console.log(`Playing on hammer ${availableHammer.id}`);      
-        availableHammer.socket.emit('note', msg);
+      let hammer
+
+      if (msg.id) {
+        hammer = hammerSockets.find(x => x.id === msg.id);
+      } else {
+        hammer = notPlaying() || randomElement(hammerSockets);
+      }
+      
+      if (hammer) {
+        hammer.socket.emit('note', msg);
       }
     });
   });
@@ -26,19 +32,23 @@ const piano = io
 const hammers = io
   .of('/hammer')
   .on('connection', h => {
-    hammerSockets.push({id: h.id, socket: h, playing: false }); 
-    console.log(`Hammer ${h.id} connected!`);
+    hammerSockets.push({id: h.id, socket: h, playing: false, name: 'Anonymús' }); 
+    piano.emit('new-hammer', { id: h.id, name: 'Anonymús' })
+
+    h.on('name', msg => {
+      hammerSockets.find(x => x.id == h.id).name = msg.name
+      piano.emit('hammer-name', { id: h.id, name: msg.name });
+    });
 
     h.on('playing', (msg) => {
-      console.log(`Hammer ${h.id} ${msg.playing ? 'started' : 'stopped'} playing`);
-      hammerSockets.find(x => x.id == h.id).playing = msg.playing; 
+      hammerSockets.find(x => x.id === h.id).playing = msg.playing; 
     });
 
     h.on('disconnect', () => {
-      console.log(`Hammer ${h.id} disconnected!`);
-      const socketIndex = hammerSockets.indexOf(hammerSockets.find(x => x.id == h.id)); 
+      const socketIndex = hammerSockets.indexOf(hammerSockets.find(x => x.id == h.id));
       hammerSockets = [...hammerSockets.slice(0, socketIndex), ...hammerSockets.slice(socketIndex + 1)];
-      console.log(hammerSockets.map(x => x.id))
+
+      piano.emit('hammer-disconnect', { id: h.id });
     });
   });
 
