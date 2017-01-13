@@ -20,7 +20,7 @@ export default class Synth {
   }
 
   unlock() {
-    if(this._isUnlocked)
+    if(!(/(iPad|iPhone|iPod)/gi).test(window.navigator.userAgent) || this._isUnlocked)
       return;
 
     // create empty buffer and play it
