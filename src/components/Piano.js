@@ -39,9 +39,9 @@ export default class extends React.Component {
   onTriggerKey = (k, name, index) => {
     const scale = pentatonicScale
 
-    const step = scale[index % scale.length] + (Math.floor(index / scale.length) * scale[scale.length - 1])
+    const step = scale[index % scale.length]; // + (Math.floor(index / scale.length) * scale[scale.length - 1])
     
-    this.signalNote(k, calculateNote(164.81, step))
+    this.signalNote(k, calculateNote(164.81, step + 12))
   }
 
   onHammerDisconnect = (h) => {
